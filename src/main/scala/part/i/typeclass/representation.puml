@@ -1,0 +1,37 @@
+@startuml
+
+interface "trait JsonWriter[A]" {
+write()
+}
+
+abstract "object JsonWriterInstances" {
+implicit val stringWriter: JsonWriter[String]
+implicit val numberWriter: JsonWriter[Integer]
+implicit val personWriter: JsonWriter[Person]
+}
+
+abstract "object Json" {
+implicit JsonWriter
+toJson()
+}
+interface "sealed trait Json"
+
+abstract "final class JsonObject"
+abstract "final class JsonNumber"
+abstract "final class JsonString"
+
+"final class JsonString" <|-- "sealed trait Json"
+"final class JsonObject" <|-- "sealed trait Json"
+"final class JsonNumber" <|-- "sealed trait Json"
+
+"object JsonWriterInstances" <|-- "trait JsonWriter[A]"
+Main <|-- "object JsonWriterInstances"
+
+abstract Main {
+    import JsonWriterInstances._
+    Calling : Json.toJson() ...
+}
+
+
+
+@enduml
